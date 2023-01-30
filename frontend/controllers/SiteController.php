@@ -7,7 +7,7 @@ use frontend\models\VerifyEmailForm;
 use Yii;
 use yii\base\InvalidArgumentException;
 use yii\web\BadRequestHttpException;
-use yii\web\Controller;
+use yii\rest\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use common\models\LoginForm;
@@ -15,6 +15,8 @@ use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
 use frontend\models\ContactForm;
+
+use yii\rest\ActiveController;
 
 /**
  * Site controller
@@ -49,6 +51,17 @@ class SiteController extends Controller
                     'logout' => ['post'],
                 ],
             ],
+            'corsFilter' => [
+                'class' => \yii\filters\Cors::class,
+                'cors' => [
+                    // -- Прописываем откуда придет запрос - @todo вынести в файл env когда будет подключено расширение
+                    'Origin' => ['http://localhost:3000'],
+                    // Разрешить доступ к учетным данным (файлы cookie, заголовки авторизации и т. д.) в браузере.
+                    'Access-Control-Allow-Credentials' => true,
+                    //'Access-Control-Allow-Origin' => '*',
+                ],
+
+            ],
         ];
     }
 
@@ -75,7 +88,10 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        //return $this->render('index');
+        return $this->asJson(['data' => [
+            'site' => 'this is rest response',
+        ]]);
     }
 
     /**

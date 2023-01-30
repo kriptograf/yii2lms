@@ -1,0 +1,2 @@
+nuxt-dev:
+	yarn dev
