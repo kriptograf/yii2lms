@@ -15,3 +15,13 @@ migrate:
 
 nuxt-dev:
 	yarn dev
+
+uperm:
+	sudo chown ${USER}:${USER} backend -R
+	sudo chmod -R 777 backend
+	sudo chown ${USER}:${USER} console -R
+	sudo chmod -R 777 console
+	sudo chown ${USER}:${USER} common -R
+	sudo chmod -R 777 common
+	sudo chown ${USER}:${USER} frontend -R
+	sudo chmod -R 777 frontend

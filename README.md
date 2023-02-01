@@ -70,6 +70,12 @@ Access it in your browser by opening
     backend: http://127.0.0.1:21080
 ```
 
-```
+```shell
 docker-compose run --rm backend yii migrate
 ```
+
+```shell
+docker-compose run --rm backend yii migrate/create
+```
+
+-- Миграции
