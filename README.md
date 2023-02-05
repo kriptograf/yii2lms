@@ -78,4 +78,13 @@ docker-compose run --rm backend yii migrate
 docker-compose run --rm backend yii migrate/create
 ```
 
--- Миграции
+### Apply RBAC migrations
+```shell
+docker-compose run --rm backend yii migrate --migrationPath=@yii/rbac/migrations
+```
+
+### Seeding test data
+
+```shell
+docker-compose run --rm backend yii seed
+```
