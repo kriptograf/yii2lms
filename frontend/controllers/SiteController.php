@@ -2,6 +2,13 @@
 
 namespace frontend\controllers;
 
+use common\models\Blog;
+use common\models\BlogCategories;
+use common\models\Categories;
+use common\models\Sections;
+use common\models\Tags;
+use common\models\User;
+use common\models\Webinars;
 use frontend\models\ResendVerificationEmailForm;
 use frontend\models\VerifyEmailForm;
 use Yii;
@@ -88,9 +95,22 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        //return $this->render('index');
+        $users = User::find()->all();
+        $webinars = Webinars::find()->all();
+        $blogCategories = BlogCategories::find()->all();
+        $blogs = Blog::find()->all();
+        $categories = Categories::find()->all();
+        $sections = Sections::find()->all();
+        $tags = Tags::find()->all();
+
         return $this->asJson(['data' => [
             'site' => 'this is rest response',
+            'users' => $users,
+            'webinars' => $webinars,
+            'blogCategories' => $blogCategories,
+            'blogs' => $blogs,
+            'categories' => $categories,
+            'tags' => $tags,
         ]]);
     }
 

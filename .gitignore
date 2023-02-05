@@ -6,6 +6,9 @@
 # phpstorm project files
 .idea
 
+# environment files
+.env
+
 # netbeans project files
 nbproject
 
@@ -41,3 +44,4 @@ phpunit.phar
 /backend/web/index.php
 /backend/web/index-test.php
 /backend/web/robots.txt
+/.data/
