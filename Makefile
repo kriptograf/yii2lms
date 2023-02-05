@@ -25,3 +25,5 @@ uperm:
 	sudo chmod -R 777 common
 	sudo chown ${USER}:${USER} frontend -R
 	sudo chmod -R 777 frontend
+	sudo chown ${USER}:${USER} .data -R
+	sudo chmod -R 777 .data
