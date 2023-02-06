@@ -210,4 +210,13 @@ class User extends ActiveRecord implements IdentityInterface
     {
         $this->password_reset_token = null;
     }
+
+    /**
+     * @return bool|int|string|null
+     * @author Виталий Москвин <foreach@mail.ru>
+     */
+    public function getCountWebinars()
+    {
+        return $this->hasMany(Webinars::class, ['creator_id' => 'id'])->count();
+    }
 }

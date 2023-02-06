@@ -2,6 +2,7 @@
 
 namespace common\models;
 
+use Carbon\Carbon;
 use Yii;
 
 /**
@@ -68,6 +69,32 @@ class Tickets extends \yii\db\ActiveRecord
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];
+    }
+
+    /**
+     * Проверка валидности тикета
+     * @return bool
+     * @author Виталий Москвин <foreach@mail.ru>
+     */
+    public function isValid(): bool
+    {
+        $now = Carbon::now()->format('Y-m-d H:i:s');
+        $ticket = $this;
+        $valid = true;
+
+        if ($ticket->start_date > $now or $this->end_date < $now) {
+            $valid = false;
+        }
+
+        if ($ticket->capacity) {
+            $ticketUserCount = TicketUsers::find()->where(['ticket_id' => $ticket->id])->count();
+
+            if ($ticketUserCount and $ticket->capacity <= $ticketUserCount) {
+                $valid = false;
+            }
+        }
+
+        return $valid;
     }
 
     /**

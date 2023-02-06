@@ -19,6 +19,9 @@ use Yii;
  */
 class Testimonials extends \yii\db\ActiveRecord
 {
+    const STATUS_ACTIVE = 'active';
+    const STATUS_DISABLE = 'disable';
+
     /**
      * {@inheritdoc}
      */

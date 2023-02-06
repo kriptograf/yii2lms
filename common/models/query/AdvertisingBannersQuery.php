@@ -9,10 +9,14 @@ namespace common\models\query;
  */
 class AdvertisingBannersQuery extends \yii\db\ActiveQuery
 {
-    /*public function active()
+    /**
+     * @return \common\models\query\AdvertisingBannersQuery
+     * @author Виталий Москвин <foreach@mail.ru>
+     */
+    public function published(): AdvertisingBannersQuery
     {
-        return $this->andWhere('[[status]]=1');
-    }*/
+        return $this->andWhere(['published' => true]);
+    }
 
     /**
      * {@inheritdoc}

@@ -19,6 +19,19 @@ use Yii;
  */
 class AdvertisingBanners extends \yii\db\ActiveRecord
 {
+    /** @var array|string[]  */
+    public static array $positions = [
+        'home1', 'home2', 'course', 'course_sidebar'
+    ];
+
+    /** @var string[]  */
+    public static array $size = [
+        '12' => 'full',
+        '6' => '1/2',
+        '4' => '1/3',
+        '3' => '1/4'
+    ];
+
     /**
      * {@inheritdoc}
      */

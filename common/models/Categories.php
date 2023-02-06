@@ -93,6 +93,11 @@ class Categories extends \yii\db\ActiveRecord
         return $this->hasMany(Webinars::class, ['category_id' => 'id']);
     }
 
+    public function getCountWebinars()
+    {
+        return $this->hasMany(Webinars::class, ['category_id' => 'id'])->count();
+    }
+
     /**
      * {@inheritdoc}
      * @return \common\models\query\CategoriesQuery the active query used by this AR class.

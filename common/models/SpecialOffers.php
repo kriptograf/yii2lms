@@ -23,6 +23,9 @@ use Yii;
  */
 class SpecialOffers extends \yii\db\ActiveRecord
 {
+    const STATUS_ACTIVE = true;
+    const STATUS_INACTIVE = false;
+
     /**
      * {@inheritdoc}
      */

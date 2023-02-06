@@ -2,6 +2,8 @@
 
 namespace common\models\query;
 
+use common\models\SpecialOffers;
+
 /**
  * This is the ActiveQuery class for [[\common\models\SpecialOffers]].
  *
@@ -9,10 +11,14 @@ namespace common\models\query;
  */
 class SpecialOffersQuery extends \yii\db\ActiveQuery
 {
-    /*public function active()
+    /**
+     * @return \common\models\query\SpecialOffersQuery
+     * @author Виталий Москвин <foreach@mail.ru>
+     */
+    public function active(): SpecialOffersQuery
     {
-        return $this->andWhere('[[status]]=1');
-    }*/
+        return $this->andWhere(['status' => SpecialOffers::STATUS_ACTIVE]);
+    }
 
     /**
      * {@inheritdoc}

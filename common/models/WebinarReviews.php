@@ -25,6 +25,9 @@ use Yii;
  */
 class WebinarReviews extends \yii\db\ActiveRecord
 {
+    const STATUS_PENDING = 'pending';
+    const STATUS_ACTIVE = 'active';
+
     /**
      * {@inheritdoc}
      */

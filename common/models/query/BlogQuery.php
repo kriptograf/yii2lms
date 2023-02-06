@@ -2,6 +2,8 @@
 
 namespace common\models\query;
 
+use common\models\Blog;
+
 /**
  * This is the ActiveQuery class for [[\common\models\Blog]].
  *
@@ -9,10 +11,14 @@ namespace common\models\query;
  */
 class BlogQuery extends \yii\db\ActiveQuery
 {
-    /*public function active()
+    /**
+     * @return \common\models\query\BlogQuery
+     * @author Виталий Москвин <foreach@mail.ru>
+     */
+    public function publish(): BlogQuery
     {
-        return $this->andWhere('[[status]]=1');
-    }*/
+        return $this->andWhere(['status' => Blog::STATUS_PUBLISH]);
+    }
 
     /**
      * {@inheritdoc}

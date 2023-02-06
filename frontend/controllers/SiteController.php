@@ -2,13 +2,16 @@
 
 namespace frontend\controllers;
 
-use common\models\Blog;
-use common\models\BlogCategories;
-use common\models\Categories;
-use common\models\Sections;
-use common\models\Tags;
-use common\models\User;
-use common\models\Webinars;
+use common\models\Subscribes;
+use common\repositories\AdvertisingBannerRepository;
+use common\repositories\BlogRepository;
+use common\repositories\FeatureWebinarsRepository;
+use common\repositories\SalesRepository;
+use common\repositories\SettingsRepository;
+use common\repositories\TestimonialsRepository;
+use common\repositories\TrendCategoriesRepository;
+use common\repositories\UserRepository;
+use common\repositories\WebinarsRepository;
 use frontend\models\ResendVerificationEmailForm;
 use frontend\models\VerifyEmailForm;
 use Yii;
@@ -23,13 +26,49 @@ use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
 use frontend\models\ContactForm;
 
-use yii\rest\ActiveController;
-
 /**
  * Site controller
  */
 class SiteController extends Controller
 {
+    private FeatureWebinarsRepository $featureWebinarsRepository;
+    private SettingsRepository $settingsRepository;
+    private WebinarsRepository $webinarsRepository;
+    private SalesRepository           $salesRepository;
+    private TrendCategoriesRepository $trendCategoryRepository;
+    private BlogRepository $blogRepository;
+    private UserRepository         $userRepository;
+    private TestimonialsRepository      $testimonialsRepository;
+    private AdvertisingBannerRepository $advertisingBannerRepository;
+
+    public function __construct(
+        $id,
+        $module,
+        FeatureWebinarsRepository $featureWebinarsRepository,
+        SettingsRepository $settingsRepository,
+        WebinarsRepository $webinarsRepository,
+        SalesRepository $salesRepository,
+        TrendCategoriesRepository $trendCategoryRepository,
+        BlogRepository $blogRepository,
+        UserRepository $userRepository,
+        TestimonialsRepository $testimonialsRepository,
+        AdvertisingBannerRepository $advertisingBannerRepository,
+        $config = []
+    )
+    {
+        $this->featureWebinarsRepository = $featureWebinarsRepository;
+        $this->settingsRepository = $settingsRepository;
+        $this->webinarsRepository = $webinarsRepository;
+        $this->salesRepository = $salesRepository;
+        $this->trendCategoryRepository = $trendCategoryRepository;
+        $this->blogRepository = $blogRepository;
+        $this->userRepository = $userRepository;
+        $this->testimonialsRepository = $testimonialsRepository;
+        $this->advertisingBannerRepository = $advertisingBannerRepository;
+
+        parent::__construct($id, $module, $config);
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -92,25 +131,92 @@ class SiteController extends Controller
      * Displays homepage.
      *
      * @return mixed
+     * @throws \Throwable
      */
     public function actionIndex()
     {
-        $users = User::find()->all();
-        $webinars = Webinars::find()->all();
-        $blogCategories = BlogCategories::find()->all();
-        $blogs = Blog::find()->all();
-        $categories = Categories::find()->all();
-        $sections = Sections::find()->all();
-        $tags = Tags::find()->all();
+        $homeSectionsSettings = $this->settingsRepository->getHomeSectionsSettings();
+
+        $featureWebinars = $this->featureWebinarsRepository->getFeatureForHomePage();
+
+        if (!empty($homeSectionsSettings) && !empty($homeSectionsSettings['latest_classes'])) {
+            $latestWebinars = $this->webinarsRepository->getLatest();
+        }
+
+        if (!empty($homeSectionsSettings) && !empty($homeSectionsSettings['best_sellers'])) {
+            $bestSaleWebinarsIds = $this->salesRepository->getBestSaleWebinarsIds();
+            $bestSaleWebinars = $this->webinarsRepository->getBestSales($bestSaleWebinarsIds);
+        }
+
+        if (!empty($homeSectionsSettings) && !empty($homeSectionsSettings['best_rates'])) {
+            $bestRateWebinars = $this->webinarsRepository->getBestRate();
+        }
+
+        if (!empty($homeSectionsSettings) && !empty($homeSectionsSettings['discount_classes'])) {
+            $hasDiscountWebinars = $this->webinarsRepository->getHasDiscountWebinars();
+        }
+
+        if (!empty($homeSectionsSettings) && !empty($homeSectionsSettings['free_classes'])) {
+            $freeWebinars = $this->webinarsRepository->getFree();
+        }
+
+        if (!empty($homeSectionsSettings) && !empty($homeSectionsSettings['trend_categories'])) {
+            $trendCategories = $this->trendCategoryRepository->getForHomepage();
+        }
+
+        if (!empty($homeSectionsSettings) && !empty($homeSectionsSettings['blog'])) {
+            $blog = $this->blogRepository->getForHomepage();
+        }
+
+        if (!empty($homeSectionsSettings) && !empty($homeSectionsSettings['instructors'])) {
+            $instructors = $this->userRepository->getInstructors();
+        }
+
+        if (!empty($homeSectionsSettings) && !empty($homeSectionsSettings['organizations'])) {
+            $organizations = $this->userRepository->getOrganizations();
+        }
+
+        if (!empty($homeSectionsSettings) && !empty($homeSectionsSettings['testimonials'])) {
+            $testimonials = $this->testimonialsRepository->getAllActive();
+        }
+
+        if (!empty($homeSectionsSettings) && !empty($homeSectionsSettings['subscribes'])) {
+            $subscribes = Subscribes::find()->all();
+        }
+
+        $advertisingBanners = $this->advertisingBannerRepository->getForHomepage();
+
+        $skillfulTeachersCount = $this->userRepository->getSkillfulTeachersCount();
+
+        $studentsCount = $this->userRepository->getStudentCount();
+
+        $liveClassCount = $this->webinarsRepository->getLiveClassCount();
+
+        $offlineCourseCount = $this->webinarsRepository->getOfflineCourseCount();
+
+        $seoSettings = $this->settingsRepository->getSeoHomeSettings('home');
 
         return $this->asJson(['data' => [
             'site' => 'this is rest response',
-            'users' => $users,
-            'webinars' => $webinars,
-            'blogCategories' => $blogCategories,
-            'blogs' => $blogs,
-            'categories' => $categories,
-            'tags' => $tags,
+            'homeSectionsSettings' => $homeSectionsSettings,
+            'featureWebinars' => $featureWebinars,
+            'latestWebinars' => $latestWebinars ?? [],
+            'bestSaleWebinars' => $bestSaleWebinars ?? [],
+            'bestRateWebinars' => $bestRateWebinars ?? [],
+            'hasDiscountWebinars' => $hasDiscountWebinars ?? [],
+            'freeWebinars' => $freeWebinars ?? [],
+            'trendCategories' => $trendCategories ?? [],
+            'blog' => $blog ?? [],
+            'instructors' => $instructors ?? [],
+            'organizations' => $organizations ?? [],
+            'testimonials' => $testimonials ?? [],
+            'subscribes' => $subscribes ?? [],
+            'advertisingBanners' => $advertisingBanners,
+            'skillfulTeachersCount' => $skillfulTeachersCount,
+            'studentsCount' => $studentsCount,
+            'liveClassCount' => $liveClassCount,
+            'offlineCourseCount' => $offlineCourseCount,
+            'seoSettings' => $seoSettings,
         ]]);
     }
 

@@ -2,6 +2,8 @@
 
 namespace common\models\query;
 
+use common\models\Webinars;
+
 /**
  * This is the ActiveQuery class for [[\common\models\Webinars]].
  *
@@ -9,16 +11,21 @@ namespace common\models\query;
  */
 class WebinarsQuery extends \yii\db\ActiveQuery
 {
-    /*public function active()
+    public function active(): WebinarsQuery
     {
-        return $this->andWhere('[[status]]=1');
-    }*/
+        return $this->andWhere(['status' => Webinars::STATUS_ACTIVE]);
+    }
+
+    public function noPrivate(): WebinarsQuery
+    {
+        return $this->andWhere(['private' => false]);
+    }
 
     /**
      * {@inheritdoc}
      * @return \common\models\Webinars[]|array
      */
-    public function all($db = null)
+    public function all($db = null): array
     {
         return parent::all($db);
     }

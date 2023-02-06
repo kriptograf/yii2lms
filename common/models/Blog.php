@@ -7,23 +7,25 @@ use Yii;
 /**
  * This is the model class for table "blog".
  *
- * @property int $id
- * @property int|null $category_id
- * @property int|null $author_id
- * @property string|null $title
- * @property string|null $slug
- * @property string|null $image
- * @property string|null $description
- * @property string|null $meta_description
- * @property string|null $content
- * @property int|null $visit_count
- * @property int|null $enable_comment
- * @property string|null $status
- * @property string|null $created_at
- * @property string|null $updated_at
+ * @property int                      $id
+ * @property int|null                 $category_id
+ * @property int|null                 $author_id
+ * @property string|null              $title
+ * @property string|null              $slug
+ * @property string|null              $image
+ * @property string|null              $description
+ * @property string|null              $meta_description
+ * @property string|null              $content
+ * @property int|null                 $visit_count
+ * @property int|null                 $enable_comment
+ * @property string|null              $status
+ * @property string|null              $created_at
+ * @property string|null              $updated_at
  *
- * @property User $author
- * @property BlogCategories $category
+ * @property User                     $author
+ * @property BlogCategories           $category
+ * @property-read \yii\db\ActiveQuery $comments
+ * @property integer                  $commentsCount
  */
 class Blog extends \yii\db\ActiveRecord
 {
@@ -33,7 +35,7 @@ class Blog extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public static function tableName()
+    public static function tableName(): string
     {
         return 'blog';
     }
@@ -41,7 +43,7 @@ class Blog extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             [['category_id', 'author_id', 'visit_count',], 'integer'],
@@ -58,7 +60,7 @@ class Blog extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels()
+    public function attributeLabels(): array
     {
         return [
             'id' => 'ID',
@@ -96,6 +98,24 @@ class Blog extends \yii\db\ActiveRecord
     public function getCategory()
     {
         return $this->hasOne(BlogCategories::class, ['id' => 'category_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     * @author Виталий Москвин <foreach@mail.ru>
+     */
+    public function getComments(): \yii\db\ActiveQuery
+    {
+        return $this->hasMany(Comments::class, ['blog_id' => 'id']);
+    }
+
+    /**
+     * @return bool|int|string|null
+     * @author Виталий Москвин <foreach@mail.ru>
+     */
+    public function getCommentsCount()
+    {
+        return $this->hasMany(Comments::class, ['blog_id' => 'id'])->count();
     }
 
     /**

@@ -2,6 +2,8 @@
 
 namespace common\models\query;
 
+use common\models\Testimonials;
+
 /**
  * This is the ActiveQuery class for [[\common\models\Testimonials]].
  *
@@ -9,10 +11,14 @@ namespace common\models\query;
  */
 class TestimonialsQuery extends \yii\db\ActiveQuery
 {
-    /*public function active()
+    /**
+     * @return \common\models\query\TestimonialsQuery
+     * @author Виталий Москвин <foreach@mail.ru>
+     */
+    public function active(): TestimonialsQuery
     {
-        return $this->andWhere('[[status]]=1');
-    }*/
+        return $this->andWhere(['status' => Testimonials::STATUS_ACTIVE]);
+    }
 
     /**
      * {@inheritdoc}

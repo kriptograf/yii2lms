@@ -85,7 +85,8 @@ class Webinars extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['teacher_id', 'creator_id', 'category_id', 'duration', 'capacity', 'price', 'support', 'downloadable', 'points', 'private'], 'integer'],
+            [['teacher_id', 'creator_id', 'category_id', 'duration', 'capacity', 'price', 'support', 'downloadable', 'points'], 'integer'],
+            [['private'], 'boolean'],
             [['start_date', 'created_at', 'updated_at', 'partner_instructor', 'subscribe',], 'safe'],
             [['seo_description', 'description', 'message_for_reviewer'], 'string'],
             [['type', 'title', 'slug', 'thumbnail', 'image_cover', 'video_demo', 'status'], 'string', 'max' => 255],
