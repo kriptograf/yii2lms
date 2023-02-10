@@ -1,51 +1,54 @@
 <template>
   <div class="dropdown">
-    <button type="button" class="btn btn-transparent dropdown-toggle" id="navbarNotification" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-    <i data-feather="bell" width="20" height="20" class="mr-10"></i>
-
-    @if(!empty($unReadNotifications) and count($unReadNotifications))
-    <span class="badge badge-circle-danger d-flex align-items-center justify-content-center">count($unReadNotifications)</span>
-    @endif
+    <button type="button" class="btn btn-transparent dropdown-toggle" @click="showNotifications = !showNotifications">
+      <Icon name="uil:bell" size="20" class="mr-10" />
+      <span v-if="unReadNotifications.length" class="badge badge-circle-danger d-flex align-items-center justify-content-center">{{ unReadNotifications.length }}</span>
     </button>
 
-    <div class="dropdown-menu pt-20" aria-labelledby="navbarNotification">
+    <div v-show="showNotifications" class="dropdown-menu pt-20" :class="{ show: showNotifications }">
       <div class="d-flex flex-column h-100">
         <div class="mb-auto navbar-notification-card" data-simplebar>
-          <div class="d-md-none border-bottom mb-20 pb-10 text-right">
-            <i class="close-dropdown mr-10" data-feather="x" width="32" height="32"></i>
+          <div class="border-bottom mb-20 pb-10 text-right">
+            <Icon name="uil:x" size="32" class="close-dropdown mr-10" @click="showNotifications = !showNotifications" />
           </div>
 
-          @if(!empty($unReadNotifications) and count($unReadNotifications))
-
-          @foreach($unReadNotifications as $unReadNotification)
-          <a href="/panel/notifications?notification=$unReadNotification->id">
-            <div class="navbar-notification-item border-bottom">
-              <h4 class="font-14 font-weight-bold text-secondary">$unReadNotification->title</h4>
-              <span class="notify-at d-block mt-5">dateTimeFormat($unReadNotification->created_at,'Y M j | H:i')</span>
-            </div>
-          </a>
-          @endforeach
-
-          @else
-          <div class="d-flex align-items-center text-center py-50">
-            <i data-feather="bell" width="20" height="20" class="mr-10"></i>
-            <span class="">trans('notification.empty_notifications')</span>
+          <template v-if="unReadNotifications.length">
+            <a v-for="unReadNotification in unReadNotifications" href="/panel/notifications?notification=$unReadNotification->id">
+              <div class="navbar-notification-item border-bottom">
+                <h4 class="font-14 font-weight-bold text-secondary">{{ unReadNotification.title }}</h4>
+                <span class="notify-at d-block mt-5">{{ unReadNotification.created_at }}</span>
+              </div>
+            </a>
+          </template>
+          <div v-else class="d-flex align-items-center text-center py-50">
+            <Icon name="uil:bell" size="20" class="mr-10" />
+            <span class="">Нет новых уведомлений</span>
           </div>
-          @endif
-
         </div>
 
-        @if(!empty($unReadNotifications) and count($unReadNotifications))
-        <div class="mt-10 navbar-notification-action">
-          <a href="/panel/notifications" class="btn btn-sm btn-danger btn-block">trans('notification.all_notifications')</a>
+        <div v-if="unReadNotifications.length" class="mt-10 navbar-notification-action">
+          <a href="/panel/notifications" class="btn btn-sm btn-danger btn-block">Показать все уведомления</a>
         </div>
-        @endif
+
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
+import { useFetch, useRuntimeConfig } from "nuxt/app";
+import {ref} from "vue";
+
+const unReadNotifications = ref([]);
+
+const showNotifications = ref(false);
+
+const config = useRuntimeConfig();
+
+useFetch(`${config.public.apiBase}/site/notifications`).then((resp) => {
+  console.log('ТщешашсфешщтыCartDropdown', resp.data.value.unReadNotifications);
+  unReadNotifications.value = resp.data.value.unReadNotifications;
+});
 
 </script>
 

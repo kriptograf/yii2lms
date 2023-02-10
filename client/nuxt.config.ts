@@ -5,5 +5,17 @@ export default defineNuxtConfig({
       apiBase: process.env.API_BASE_URL
     },
   },
-  ssr: false
+  ssr: false,
+  app: {
+    head: {
+      link: [
+        { rel: 'stylesheet', href: '/css/app.css', type: 'text/css' },
+        { rel: 'stylesheet', href: '/css/font.css', type: 'text/css' }
+      ],
+    },
+  },
+  modules: [
+    'nuxt-icon',
+    'nuxt-swiper'
+  ]
 })

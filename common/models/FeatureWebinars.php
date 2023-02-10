@@ -62,6 +62,17 @@ class FeatureWebinars extends \yii\db\ActiveRecord
         ];
     }
 
+    public function fields()
+    {
+        $fields = parent::fields();
+
+        $fields['webinar'] = function () {
+            return $this->webinar;
+        };
+
+        return $fields;
+    }
+
     /**
      * Gets query for [[Webinar]].
      *

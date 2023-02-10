@@ -1,4 +1,9 @@
 <?php
+
+use frontend\components\shared\Footer;
+use frontend\components\shared\GeneralSettings;
+use frontend\components\shared\NavbarLinks;
+
 $params = array_merge(
     require __DIR__ . '/../../common/config/params.php',
     require __DIR__ . '/../../common/config/params-local.php',
@@ -9,7 +14,12 @@ $params = array_merge(
 return [
     'id' => 'app-frontend',
     'basePath' => dirname(__DIR__),
-    'bootstrap' => ['log'],
+    'bootstrap' => [
+        'log',
+        GeneralSettings::class,
+        NavbarLinks::class,
+        Footer::class,
+    ],
     'controllerNamespace' => 'frontend\controllers',
     'components' => [
         'request' => [

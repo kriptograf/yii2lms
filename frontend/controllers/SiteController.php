@@ -5,6 +5,7 @@ namespace frontend\controllers;
 use common\models\Subscribes;
 use common\repositories\AdvertisingBannerRepository;
 use common\repositories\BlogRepository;
+use common\repositories\CategoryRepository;
 use common\repositories\FeatureWebinarsRepository;
 use common\repositories\SalesRepository;
 use common\repositories\SettingsRepository;
@@ -25,6 +26,7 @@ use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
 use frontend\models\ContactForm;
+use function Symfony\Component\Translation\t;
 
 /**
  * Site controller
@@ -196,8 +198,8 @@ class SiteController extends Controller
 
         $seoSettings = $this->settingsRepository->getSeoHomeSettings('home');
 
-        return $this->asJson(['data' => [
-            'site' => 'this is rest response',
+        return $this->asJson([
+            'generalSettings' => Yii::$app->params['generalSettings'],
             'homeSectionsSettings' => $homeSectionsSettings,
             'featureWebinars' => $featureWebinars,
             'latestWebinars' => $latestWebinars ?? [],
@@ -217,7 +219,42 @@ class SiteController extends Controller
             'liveClassCount' => $liveClassCount,
             'offlineCourseCount' => $offlineCourseCount,
             'seoSettings' => $seoSettings,
-        ]]);
+        ]);
+    }
+
+    public function actionSettings()
+    {
+        return $this->asJson([
+            'generalSettings' => Yii::$app->params['generalSettings'],
+            'navbarPages' => Yii::$app->params['navBarLinks'],
+            'footerColumns' => Yii::$app->params['footerColumns'],
+            'footerSocials' => Yii::$app->params['footerSocials'],
+        ]);
+    }
+
+    public function actionCart()
+    {
+        $user = Yii::$app->user->identity;
+
+        return $this->asJson([
+            'userCarts' => $user ? $user->carts : [],
+        ]);
+    }
+
+    public function actionNotifications()
+    {
+        return $this->asJson([
+            'unReadNotifications' => $this->userRepository->getUnReadNotifications(),
+        ]);
+    }
+
+    public function actionCategories()
+    {
+        $categories = (new CategoryRepository())->getForHomepage();
+
+        return $this->asJson([
+            'categories' => $categories,
+        ]);
     }
 
     /**

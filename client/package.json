@@ -8,6 +8,11 @@
     "postinstall": "nuxt prepare"
   },
   "devDependencies": {
-    "nuxt": "^3.1.0"
+    "nuxt": "^3.1.0",
+    "nuxt-icon": "^0.2.11"
+  },
+  "dependencies": {
+    "nuxt-swiper": "^1.0.0",
+    "vue-feather-icons": "^5.1.0"
   }
 }

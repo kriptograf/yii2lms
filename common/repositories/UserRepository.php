@@ -2,6 +2,7 @@
 
 namespace common\repositories;
 
+use common\models\Notifications;
 use common\models\User;
 use common\rbac\RolesEnum;
 
@@ -39,16 +40,26 @@ class UserRepository
      */
     public function getOrganizations(): array
     {
+        $result = [];
+
         $organizationIds = \Yii::$app->authManager->getUserIdsByRole(RolesEnum::ROLE_ORGANIZATION);
 
-        return User::find()
-            ->select(['id', 'username'])
-            ->with(['countWebinars'])
+        $users = User::find()
+            //->select(['id', 'username'])
+            //->with(['countWebinars'])
             ->where(['in', 'id', $organizationIds])
             ->andWhere(['status' => User::STATUS_ACTIVE])
             ->limit(6)
             ->all()
         ;
+
+        foreach ($users as $key => $user) {
+            $result[$key]['id'] = $user->id;
+            $result[$key]['username'] = $user->username;
+            $result[$key]['countWebinars'] = $user->countWebinars;
+        }
+
+        return $result;
     }
 
     /**
@@ -81,5 +92,12 @@ class UserRepository
             ->andWhere(['status' => User::STATUS_ACTIVE])
             ->count()
         ;
+    }
+
+    public function getUnReadNotifications()
+    {
+        // -- @todo Только непрочитанные получать
+        // -- @todo Разделить потом по статусам, ролям и группам
+        return Notifications::find()->where(['user_id' => \Yii::$app->user->id])->all();
     }
 }

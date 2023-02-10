@@ -22,6 +22,9 @@ use yii\web\IdentityInterface;
  * @property integer $created_at
  * @property integer $updated_at
  * @property string $password write-only password
+ *
+ * @property int $countWebinars
+ * @property Cart[] $carts
  */
 class User extends ActiveRecord implements IdentityInterface
 {
@@ -56,6 +59,20 @@ class User extends ActiveRecord implements IdentityInterface
         return [
             ['status', 'default', 'value' => self::STATUS_INACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_INACTIVE, self::STATUS_DELETED]],
+        ];
+    }
+
+    /**
+     * @todo добавить аватарку
+     * @return string[]
+     * @author Виталий Москвин <foreach@mail.ru>
+     */
+    public function fields()
+    {
+        return [
+            'id',
+            'username',
+            'email',
         ];
     }
 
@@ -218,5 +235,10 @@ class User extends ActiveRecord implements IdentityInterface
     public function getCountWebinars()
     {
         return $this->hasMany(Webinars::class, ['creator_id' => 'id'])->count();
+    }
+
+    public function getCarts()
+    {
+        return $this->hasMany(Cart::class, ['creator_id' => 'id']);
     }
 }

@@ -20,21 +20,27 @@ class FeatureWebinarsRepository
      */
     public function getFeatureForHomePage(): array
     {
+//        return FeatureWebinars::find()
+//            ->with([
+//                'webinar' => function ($query) {
+//                    $query->with([
+//                        'teacher' => function ($qu) {
+//                            $qu->select('id', 'username');
+//                        },
+//                        'webinarReviews' => function ($query) {
+//                            $query->where(['status' => 'active']);
+//                        },
+//                        'tickets',
+//                        'featureWebinars'
+//                    ]);
+//                }
+//            ])
+//            ->where(['in', 'page', ['home', 'home_categories']])
+//            ->orderBy(['updated_at' => SORT_DESC])
+//            ->all();
+
         return FeatureWebinars::find()
-            ->with([
-                'webinar' => function ($query) {
-                    $query->with([
-                        'teacher' => function ($qu) {
-                            $qu->select('id', 'username');
-                        },
-                        'webinarReviews' => function ($query) {
-                            $query->where(['status' => 'active']);
-                        },
-                        'tickets',
-                        'featureWebinars'
-                    ]);
-                }
-            ])
+            ->with(['webinar'])
             ->where(['in', 'page', ['home', 'home_categories']])
             ->orderBy(['updated_at' => SORT_DESC])
             ->all();

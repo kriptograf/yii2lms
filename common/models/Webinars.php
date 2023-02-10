@@ -132,6 +132,24 @@ class Webinars extends \yii\db\ActiveRecord
         ];
     }
 
+    public function fields()
+    {
+        $fields = parent::fields();
+
+        $fields['teacher'] = function () {
+            return $this->teacher;
+        };
+
+        $fields['rate'] = function () {
+            $sum = 0;
+            foreach ($this->webinarReviews as $webinarReview) {
+                $sum += $webinarReview->rates;
+            }
+        };
+
+        return $fields;
+    }
+
     /**
      * Gets query for [[Accountings]].
      *

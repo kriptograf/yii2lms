@@ -88,3 +88,7 @@ docker-compose run --rm backend yii migrate --migrationPath=@yii/rbac/migrations
 ```shell
 docker-compose run --rm backend yii seed
 ```
+
+@todo
+
+- Допилить nuxt, что бы можно было использовать глобальные настройки из yii

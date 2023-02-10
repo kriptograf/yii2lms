@@ -1,62 +1,62 @@
 <template>
   <div>
-    @if(!empty($heroSectionData))
 
-    @if(!empty($heroSectionData['has_lottie']) and $heroSectionData['has_lottie'] == "1")
-    @push('scripts_bottom')
-<!--    <script src="/assets/default/vendors/lottie/lottie-player.js"></script>-->
-    @endpush
-    @endif
+    <template v-if="heroSectionData">
+      <!--      Подключается плеер карусели -->
+      @if(!empty($heroSectionData['has_lottie']) and $heroSectionData['has_lottie'] == "1")
+        @push('scripts_bottom')
+        <!--    <script src="/assets/default/vendors/lottie/lottie-player.js"></script>-->
+        @endpush
+      @endif
+      <section class="slider-container" style="background-image: url('heroSectionData['hero_background']')">
 
-    <section class="slider-container" style="background-image: url('$heroSectionData['hero_background']')">
+        @if($heroSection == "1")
+        <div class="mask"></div>
+        @endif
 
-    @if($heroSection == "1")
-    <div class="mask"></div>
-    @endif
+        <div class="container user-select-none">
 
-    <div class="container user-select-none">
+          @if($heroSection == "2")
+          <div class="row slider-content align-items-center hero-section2 flex-column-reverse flex-md-row">
+            <div class="col-12 col-md-7 col-lg-6">
+              <h1 class="text-secondary font-weight-bold"> $heroSectionData['title']</h1>
+              <p class="slide-hint text-gray mt-20">{!! nl2br($heroSectionData['description']) !!}</p>
 
-      @if($heroSection == "2")
-      <div class="row slider-content align-items-center hero-section2 flex-column-reverse flex-md-row">
-        <div class="col-12 col-md-7 col-lg-6">
-          <h1 class="text-secondary font-weight-bold"> $heroSectionData['title']</h1>
-          <p class="slide-hint text-gray mt-20">{!! nl2br($heroSectionData['description']) !!}</p>
-
-          <form action="/search" method="get" class="d-inline-flex mt-30 mt-lg-30 w-100">
-            <div class="form-group d-flex align-items-center m-0 slider-search p-10 bg-white w-100">
-              <input type="text" name="search" class="form-control border-0 mr-lg-50" placeholder="trans('home.slider_search_placeholder')"/>
-              <button type="submit" class="btn btn-primary rounded-pill">trans('home.find')</button>
+              <form action="/search" method="get" class="d-inline-flex mt-30 mt-lg-30 w-100">
+                <div class="form-group d-flex align-items-center m-0 slider-search p-10 bg-white w-100">
+                  <input type="text" name="search" class="form-control border-0 mr-lg-50" placeholder="trans('home.slider_search_placeholder')"/>
+                  <button type="submit" class="btn btn-primary rounded-pill">trans('home.find')</button>
+                </div>
+              </form>
             </div>
-          </form>
-        </div>
-        <div class="col-12 col-md-5 col-lg-6">
-          @if(!empty($heroSectionData['has_lottie']) and $heroSectionData['has_lottie'] == "1")
-          <lottie-player src=" $heroSectionData['hero_vector'] " background="transparent" speed="1" style="width: 100%;" loop autoplay></lottie-player>
+            <div class="col-12 col-md-5 col-lg-6">
+              @if(!empty($heroSectionData['has_lottie']) and $heroSectionData['has_lottie'] == "1")
+              <lottie-player src=" $heroSectionData['hero_vector'] " background="transparent" speed="1" style="width: 100%;" loop autoplay></lottie-player>
+              @else
+              <img src=" $heroSectionData['hero_vector'] " alt=" $heroSectionData['title'] " class="img-cover">
+              @endif
+            </div>
+          </div>
           @else
-          <img src=" $heroSectionData['hero_vector'] " alt=" $heroSectionData['title'] " class="img-cover">
+          <div class="text-center slider-content">
+            <h1> $heroSectionData['title'] </h1>
+            <div class="row h-100 align-items-center justify-content-center text-center">
+              <div class="col-12 col-md-9 col-lg-7">
+                <p class="mt-30 slide-hint">{!! nl2br($heroSectionData['description']) !!}</p>
+
+                <form action="/search" method="get" class="d-inline-flex mt-30 mt-lg-50 w-100">
+                  <div class="form-group d-flex align-items-center m-0 slider-search p-10 bg-white w-100">
+                    <input type="text" name="search" class="form-control border-0 mr-lg-50" placeholder=" trans('home.slider_search_placeholder') "/>
+                    <button type="submit" class="btn btn-primary rounded-pill"> trans('home.find') </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
           @endif
         </div>
-      </div>
-      @else
-      <div class="text-center slider-content">
-        <h1> $heroSectionData['title'] </h1>
-        <div class="row h-100 align-items-center justify-content-center text-center">
-          <div class="col-12 col-md-9 col-lg-7">
-            <p class="mt-30 slide-hint">{!! nl2br($heroSectionData['description']) !!}</p>
-
-            <form action="/search" method="get" class="d-inline-flex mt-30 mt-lg-50 w-100">
-              <div class="form-group d-flex align-items-center m-0 slider-search p-10 bg-white w-100">
-                <input type="text" name="search" class="form-control border-0 mr-lg-50" placeholder=" trans('home.slider_search_placeholder') "/>
-                <button type="submit" class="btn btn-primary rounded-pill"> trans('home.find') </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-      @endif
-    </div>
-    </section>
-    @endif
+      </section>
+    </template>
 
     <div class="stats-container">
       <div class="container">
@@ -64,137 +64,141 @@
           <div class="col-sm-6 col-lg-3 mt-25 mt-lg-0">
             <div class="stats-item d-flex flex-column align-items-center text-center py-30 px-5 w-100">
               <div class="stat-icon-box teacher">
-                <img src="/assets/default/img/stats/teacher.svg" alt=""/>
+                <img src="/img/stats/teacher.svg" alt=""/>
               </div>
-              <strong class="stat-number mt-10"> $skillfulTeachersCount </strong>
-              <h4 class="stat-title"> trans('home.skillful_teachers') </h4>
-              <p class="stat-desc mt-10"> trans('home.skillful_teachers_hint') </p>
+              <strong class="stat-number mt-10"> {{ data.skillfulTeachersCount }} </strong>
+              <h4 class="stat-title"> Опытные преподаватели </h4>
+              <p class="stat-desc mt-10"> Начните учиться у опытных преподавателей. </p>
             </div>
           </div>
 
           <div class="col-sm-6 col-lg-3 mt-25 mt-lg-0">
             <div class="stats-item d-flex flex-column align-items-center text-center py-30 px-5 w-100">
               <div class="stat-icon-box student">
-                <img src="/assets/default/img/stats/student.svg" alt=""/>
+                <img src="/img/stats/student.svg" alt=""/>
               </div>
-              <strong class="stat-number mt-10"> $studentsCount </strong>
-              <h4 class="stat-title"> trans('home.happy_students') </h4>
-              <p class="stat-desc mt-10"> trans('home.happy_students_hint') </p>
+              <strong class="stat-number mt-10"> {{ data.studentsCount }} </strong>
+              <h4 class="stat-title"> Счастливые студенты </h4>
+              <p class="stat-desc mt-10"> Записались к нам на занятия и повысили свою квалификацию. </p>
             </div>
           </div>
 
           <div class="col-sm-6 col-lg-3 mt-25 mt-lg-0">
             <div class="stats-item d-flex flex-column align-items-center text-center py-30 px-5 w-100">
               <div class="stat-icon-box video">
-                <img src="/assets/default/img/stats/video.svg" alt=""/>
+                <img src="/img/stats/video.svg" alt=""/>
               </div>
-              <strong class="stat-number mt-10"> $liveClassCount </strong>
-              <h4 class="stat-title"> trans('home.live_classes') </h4>
-              <p class="stat-desc mt-10"> trans('home.live_classes_hint') </p>
+              <strong class="stat-number mt-10"> {{ data.liveClassCount }} </strong>
+              <h4 class="stat-title"> Онлайн занятия </h4>
+              <p class="stat-desc mt-10"> Совершенствуйте свои навыки в режиме реального времени. </p>
             </div>
           </div>
 
           <div class="col-sm-6 col-lg-3 mt-25 mt-lg-0">
             <div class="stats-item d-flex flex-column align-items-center text-center py-30 px-5 w-100">
               <div class="stat-icon-box course">
-                <img src="/assets/default/img/stats/course.svg" alt=""/>
+                <img src="/img/stats/course.svg" alt=""/>
               </div>
-              <strong class="stat-number mt-10"> $offlineCourseCount </strong>
-              <h4 class="stat-title"> trans('home.offline_courses') </h4>
-              <p class="stat-desc mt-10"> trans('home.offline_courses_hint') </p>
+              <strong class="stat-number mt-10"> {{ data.offlineCourseCount }} </strong>
+              <h4 class="stat-title"> Видеокурсы </h4>
+              <p class="stat-desc mt-10"> Учитесь без географических и временных ограничений. </p>
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    @if(!empty($featureWebinars) and !$featureWebinars->isEmpty())
-    <section class="home-sections container mt-0 ">
+    <section v-if="data.featureWebinars.length" class="home-sections container mt-0 ">
       <div class="px-20 px-md-0">
-        <h2 class="section-title"> trans('home.featured_classes') </h2>
-        <p class="section-hint"> trans('home.featured_classes_hint') </p>
+        <h2 class="section-title"> Рекомендуемые занятия </h2>
+        <p class="section-hint"> # Просматривайте VIP-занятия и становитесь опытным </p>
       </div>
 
       <div class="feature-slider-container position-relative d-flex justify-content-center mt-10">
-        <div class="swiper-container features-swiper-container pb-25">
-          <div class="swiper-wrapper py-10">
-            @foreach($featureWebinars as $feature)
-            <div class="swiper-slide">
-              <div class="feature-slider d-flex h-100" style="background-image: url(' $feature->webinar->getImage() ')">
+        <Swiper>
+          <SwiperSlide v-for="feature in data.featureWebinars">
+            <div  class="swiper-slide">
+              <div class="feature-slider d-flex h-100" :style="`background-image: url(' ${feature.webinar.image} ')`">
                 <div class="mask"></div>
                 <div class="p-5 p-md-25 feature-slider-card">
                   <div class="d-flex flex-column feature-slider-body position-relative h-100">
-                    <a href=" $feature->webinar->getUrl() ">
-                      <h3 class="card-title"> $feature->webinar->title </h3>
+                    <a :href="feature.webinar.url">
+                      <h3 class="card-title"> {{ feature.webinar.title }} </h3>
                     </a>
 
                     <div class="user-inline-avatar mt-15 d-flex align-items-center">
                       <div class="avatar">
-                        <img src=" $feature->webinar->teacher->getAvatar() " class="img-cover" alt=" $feature->webinar->teacher->full_naem ">
+                        <img :src="feature.webinar.teacher.avatar" class="img-cover" :alt="feature.webinar.teacher.username">
                       </div>
-                      <a href=" $feature->webinar->teacher->getProfileUrl() " target="_blank" class="user-name font-14 ml-5"> $feature->webinar->teacher->full_name </a>
+                      <a :href="feature.webinar.teacher.profileUrl" target="_blank" class="user-name font-14 ml-5">{{ feature.webinar.teacher.username }}</a>
                     </div>
 
-                    <p class="mt-25 feature-desc text-gray"> $feature->description </p>
+                    <p class="mt-25 feature-desc text-gray"> {{ feature.description }} </p>
 
-                    @include('web.default.includes.webinar.rate',['rate' => $feature->webinar->getRate()])
+                    <div class="stars-card d-flex align-items-center mt-15">
+                      <!--                      @php-->
+                      <!--                      $i = 5;-->
+                      <!--                      @endphp-->
+                      <!--                      @while(&#45;&#45;$i >= 5 - $rate)-->
+                      <!--                      <i data-feather="star" width="20" height="20" class="active"></i>-->
+                      <!--                      @endwhile-->
+                      <!--                      @while($i&#45;&#45; >= 0)-->
+                      <!--                      <i data-feather="star" width="20" height="20" class=""></i>-->
+                      <!--                      @endwhile-->
+
+                      <Icon v-for="index in 5" name="uil:star" size="20" class="active" />
+
+                      <span class="badge badge-primary ml-10">{{ feature.webinar.rate }}</span>
+
+                    </div>
 
                     <div class="feature-footer mt-auto d-flex align-items-center justify-content-between">
                       <div class="d-flex justify-content-between">
                         <div class="d-flex align-items-center">
-                          <i data-feather="clock" width="20" height="20" class="webinar-icon"></i>
-                          <span class="duration ml-5 text-dark-blue font-14"> convertMinutesToHourAndMinute($feature->webinar->duration)   trans('home.hours') </span>
+                          <Icon name="uil:clock-nine" size="20" class="webinar-icon" />
+                          <span class="duration ml-5 text-dark-blue font-14"> {{ feature.webinar.duration }}  часов </span>
                         </div>
 
                         <div class="vertical-line mx-10"></div>
 
                         <div class="d-flex align-items-center">
-                          <i data-feather="calendar" width="20" height="20" class="webinar-icon"></i>
-                          <span class="date-published ml-5 text-dark-blue font-14"> dateTimeFormat($feature->webinar->start_date, 'j F Y') </span>
+                          <Icon name="uil:calendar-alt" size="20" class="webinar-icon" />
+                          <span class="date-published ml-5 text-dark-blue font-14"> {{ feature.webinar.start_date }} </span>
                         </div>
                       </div>
 
                       <div class="feature-price-box">
-                        @if(!empty($feature->webinar->price ) and $feature->webinar->price > 0)
-                         $currency  number_format($feature->webinar->price,2)
-                        @else
-                         trans('public.free')
-                        @endif
+                        <template v-if="feature.webinar.price">{{ feature.webinar.price }}</template>
+                        <template v-else>
+                          Бесплатно
+                        </template>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-            @endforeach
-          </div>
-        </div>
-
-        <div class="swiper-pagination features-swiper-pagination"></div>
+          </SwiperSlide>
+        </Swiper>
       </div>
     </section>
-    @endif
 
-    @if(!empty($latestWebinars) and !$latestWebinars->isEmpty())
-    <section class="home-sections home-sections-swiper container">
+    <section v-if="data.latestWebinars.length" class="home-sections home-sections-swiper container mt-20">
       <div class="d-flex justify-content-between ">
         <div>
-          <h2 class="section-title"> trans('home.latest_classes') </h2>
-          <p class="section-hint"> trans('home.latest_webinars_hint') </p>
+          <h2 class="section-title"> Новые занятия </h2>
+          <p class="section-hint"> #Недавно опубликованные занятия </p>
         </div>
 
-        <a href="/classes?sort=newest" class="btn btn-border-white"> trans('home.view_all') </a>
+        <a href="/classes?sort=newest" class="btn btn-border-white"> Посмотреть все </a>
       </div>
 
       <div class="mt-10 position-relative">
         <div class="swiper-container latest-webinars-swiper px-12">
           <div class="swiper-wrapper py-20">
-            @foreach($latestWebinars as $latestWebinar)
-            <div class="swiper-slide">
+            <div v-for="latestWebinar in data.latestWebinars" class="swiper-slide">
               @include('web.default.includes.webinar.grid-card',['webinar' => $latestWebinar])
             </div>
-            @endforeach
-
           </div>
         </div>
 
@@ -203,10 +207,8 @@
         </div>
       </div>
     </section>
-    @endif
 
-    @if(!empty($bestRateWebinars) and !$bestRateWebinars->isEmpty())
-    <section class="home-sections container">
+    <section v-if="data.bestRateWebinars.length" class="home-sections container">
       <div class="d-flex justify-content-between">
         <div>
           <h2 class="section-title"> trans('home.best_rates') </h2>
@@ -232,10 +234,8 @@
         </div>
       </div>
     </section>
-    @endif
 
-    @if(!empty($trendCategories) and !$trendCategories->isEmpty())
-    <section class="home-sections home-sections-swiper container">
+    <section v-if="data.trendCategories.length" class="home-sections home-sections-swiper container">
       <h2 class="section-title"> trans('home.trending_categories') </h2>
       <p class="section-hint"> trans('home.trending_categories_hint') </p>
 
@@ -260,11 +260,8 @@
         @endforeach
       </div>
     </section>
-    @endif
 
-    -- Ads Bannaer --
-    @if(!empty($advertisingBanners1) and count($advertisingBanners1))
-    <div class="home-sections container">
+    <div v-if="data.advertisingBanners1 !== undefined && data.advertisingBanners1.length" class="home-sections container">
       <div class="row">
         @foreach($advertisingBanners1 as $banner1)
         <div class="col- $banner1->size ">
@@ -275,11 +272,8 @@
         @endforeach
       </div>
     </div>
-    @endif
-    -- ./ Ads Bannaer --
 
-    @if(!empty($bestSaleWebinars) and !$bestSaleWebinars->isEmpty())
-    <section class="home-sections container">
+    <section v-if="data.bestSaleWebinars.length" class="home-sections container">
       <div class="d-flex justify-content-between">
         <div>
           <h2 class="section-title"> trans('home.best_sellers') </h2>
@@ -305,10 +299,8 @@
         </div>
       </div>
     </section>
-    @endif
 
-    @if(!empty($hasDiscountWebinars) and !$hasDiscountWebinars->isEmpty())
-    <section class="home-sections container">
+    <section v-if="data.hasDiscountWebinars.length" class="home-sections container">
       <div class="d-flex justify-content-between">
         <div>
           <h2 class="section-title"> trans('home.discount_classes') </h2>
@@ -334,10 +326,8 @@
         </div>
       </div>
     </section>
-    @endif
 
-    @if(!empty($freeWebinars) and !$freeWebinars->isEmpty())
-    <section class="home-sections home-sections-swiper container">
+    <section v-if="data.freeWebinars.length" class="home-sections home-sections-swiper container">
       <div class="d-flex justify-content-between">
         <div>
           <h2 class="section-title"> trans('home.free_classes') </h2>
@@ -365,10 +355,8 @@
         </div>
       </div>
     </section>
-    @endif
 
-    @if(!empty($testimonials) and !$testimonials->isEmpty())
-    <div class="position-relative testimonials-container">
+    <div v-if="data.testimonials.length" class="position-relative testimonials-container">
 
       <div id="parallax1" class="ltr">
         <div data-depth="0.2" class="gradient-box left-gradient-box"></div>
@@ -420,10 +408,8 @@
         <div data-depth="0.8" class="gradient-box bottom-gradient-box"></div>
       </div>
     </div>
-    @endif
 
-    @if(!empty($subscribes) and !$subscribes->isEmpty())
-    <div class="position-relative subscribes-container pe-none user-select-none">
+    <div v-if="data.subscribes.length" class="position-relative subscribes-container pe-none user-select-none">
       <div id="parallax4" class="ltr">
         <div data-depth="0.2" class="gradient-box left-gradient-box"></div>
       </div>
@@ -493,10 +479,8 @@
         <div data-depth="0.6" class="gradient-box bottom-gradient-box"></div>
       </div>
     </div>
-    @endif
 
-    @if(!empty($boxVideoOrImage))
-    <section class="home-sections home-sections-swiper position-relative">
+    <section v-if="data.boxVideoOrImage !== undefined && data.boxVideoOrImage.length" class="home-sections home-sections-swiper position-relative">
       <div class="home-video-mask"></div>
       <div class="container home-video-container d-flex flex-column align-items-center justify-content-center position-relative" style="background-image: url(' $boxVideoOrImage['background'] ?? '' ')">
         <a href=" $boxVideoOrImage['link'] ?? '' " class="home-video-play-button d-flex align-items-center justify-content-center position-relative">
@@ -509,66 +493,46 @@
         </div>
       </div>
     </section>
-    @endif
 
-    @if(!empty($instructors) and !$instructors->isEmpty())
-    <section class="home-sections container">
+    <section v-if="data.instructors.length" class="home-sections container">
       <div class="d-flex justify-content-between">
         <div>
-          <h2 class="section-title"> trans('home.instructors') </h2>
-          <p class="section-hint"> trans('home.instructors_hint') </p>
+          <h2 class="section-title"> Преподаватели </h2>
+          <p class="section-hint"> #Учитесь у опытных преподавателей </p>
         </div>
 
-        <a href="/instructors" class="btn btn-border-white"> trans('home.all_instructors') </a>
+        <a href="/instructors" class="btn btn-border-white"> Все преподаватели </a>
       </div>
 
       <div class="position-relative mt-20 ltr">
         <div class="owl-carousel customers-testimonials instructors-swiper-container">
-
-          @foreach($instructors as $instructor)
-          <div class="item">
+          <div v-for="instructor in data.instructors" class="item">
             <div class="shadow-effect">
               <div class="instructors-card d-flex flex-column align-items-center justify-content-center">
                 <div class="instructors-card-avatar">
-                  <img src=" $instructor->getAvatar() " alt=" $instructor->full_name " class="rounded-circle img-cover">
+                  <img :src="instructor.avatar" :alt="instructor.username" class="rounded-circle img-cover">
                 </div>
                 <div class="instructors-card-info mt-10 text-center">
-                  <a href=" $instructor->getProfileUrl() " target="_blank">
-                    <h3 class="font-16 font-weight-bold text-dark-blue"> $instructor->full_name </h3>
+                  <a :href="instructor.profileUrl" target="_blank">
+                    <h3 class="font-16 font-weight-bold text-dark-blue"> {{ instructor.username }} </h3>
                   </a>
 
-                  <p class="font-14 text-gray mt-5"> $instructor->bio </p>
+                  <p class="font-14 text-gray mt-5"> {{ instructor.bio }} </p>
                   <div class="stars-card d-flex align-items-center justify-content-center mt-10">
-                    @php
-                    $i = 5;
-                    @endphp
-                    @while(--$i >= 5 - $instructor->rates())
-                    <i data-feather="star" width="20" height="20" class="active"></i>
-                    @endwhile
-                    @while($i-- >= 0)
-                    <i data-feather="star" width="20" height="20" class=""></i>
-                    @endwhile
+                    <Icon v-for="index in 5" name="uil:star" size="20" class="active" />
                   </div>
 
-                  @if(!empty($instructor->hasMeeting()))
-                  <a href=" $instructor->getProfileUrl() ?tab=appointments" class="btn btn-primary btn-sm rounded-pill mt-15"> trans('home.reserve_a_live_class') </a>
-                  @else
-                  <a href=" $instructor->getProfileUrl() " class="btn btn-primary btn-sm rounded-pill mt-15"> trans('public.profile') </a>
-                  @endif
+                  <a v-if="instructor.hasMeeting" :href="instructor.profileUrl + '?tab=appointments'" class="btn btn-primary btn-sm rounded-pill mt-15"> Забронировать встречу </a>
+                  <a v-else :href="instructor.profileUrl" class="btn btn-primary btn-sm rounded-pill mt-15"> Профиль </a>
                 </div>
               </div>
             </div>
           </div>
-          @endforeach
-
         </div>
       </div>
     </section>
-    @endif
 
-    -- Ads Bannaer --
-    @if(!empty($advertisingBanners2) and count($advertisingBanners2))
-    <div class="home-sections container">
+    <div v-if="data.advertisingBanners2 !== undefined && data.advertisingBanners2.length" class="home-sections container">
       <div class="row">
         @foreach($advertisingBanners2 as $banner2)
         <div class="col- $banner2->size ">
@@ -579,38 +543,34 @@
         @endforeach
       </div>
     </div>
-    @endif
-    -- ./ Ads Bannaer --
 
-    @if(!empty($organizations) and !$organizations->isEmpty())
-    <section class="home-sections home-sections-swiper container">
+    <section v-if="data.organizations.length" class="home-sections home-sections-swiper container">
       <div class="d-flex justify-content-between">
         <div>
-          <h2 class="section-title"> trans('home.organizations') </h2>
-          <p class="section-hint"> trans('home.organizations_hint') </p>
+          <h2 class="section-title"> Организации </h2>
+          <p class="section-hint">#Лучшие образовательные организации готовы вам помочь</p>
         </div>
 
-        <a href="/organizations" class="btn btn-border-white"> trans('home.all_organizations') </a>
+        <a href="/organizations" class="btn btn-border-white"> Все организации </a>
       </div>
 
       <div class="position-relative mt-20">
         <div class="swiper-container organization-swiper-container px-12">
           <div class="swiper-wrapper py-20">
 
-            @foreach($organizations as $organization)
-            <div class="swiper-slide">
+            <div v-for="organization in data.organizations" class="swiper-slide">
               <div class="home-organizations-card d-flex flex-column align-items-center justify-content-center">
                 <div class="home-organizations-avatar">
-                  <img src=" $organization->getAvatar() " class="img-cover rounded-circle" alt=" $organization->full_name ">
+                  <img :src="organization.avatar" class="img-cover rounded-circle" :alt="organization.username">
                 </div>
-                <a href=" $organization->getProfileUrl() " class="mt-25 d-flex flex-column align-items-center justify-content-center">
-                  <h3 class="home-organizations-title"> $organization->full_name </h3>
-                  <p class="home-organizations-desc mt-10"> $organization->bio </p>
-                  <span class="home-organizations-badge badge mt-15"> $organization->webinars_count   trans('webinars.classes') </span>
+                <a :href="organization.profileUrl" class="mt-25 d-flex flex-column align-items-center justify-content-center">
+                  <h3 class="home-organizations-title"> {{ organization.username }} </h3>
+                  <p class="home-organizations-desc mt-10"> {{ organization.bio }} </p>
+                  <span class="home-organizations-badge badge mt-15"> {{ organization.webinars_count }}   Курсы </span>
                 </a>
               </div>
             </div>
-            @endforeach
+
           </div>
         </div>
 
@@ -619,37 +579,63 @@
         </div>
       </div>
     </section>
-    @endif
 
-    @if(!empty($blog) and !$blog->isEmpty())
-    <section class="home-sections container">
+    <section v-if="data.blog.length" class="home-sections container">
       <div class="d-flex justify-content-between">
         <div>
-          <h2 class="section-title"> trans('home.blog') </h2>
-          <p class="section-hint"> trans('home.blog_hint') </p>
+          <h2 class="section-title"> Блог </h2>
+          <p class="section-hint"> #Читайте последние новости и статьи </p>
         </div>
 
-        <a href="/blog" class="btn btn-border-white"> trans('home.all_blog') </a>
+        <a href="/blog" class="btn btn-border-white"> Записи в блоге </a>
       </div>
 
       <div class="row mt-35">
+        <div v-for="post in data.blog" class="col-12 col-md-4 col-lg-4 mt-20 mt-lg-0">
+          <div class="blog-grid-card">
+            <div class="blog-grid-image">
+              <img :src="post.image" class="img-cover" :alt="post.title">
 
-        @foreach($blog as $post)
-        <div class="col-12 col-md-4 col-lg-4 mt-20 mt-lg-0">
-          @include('web.default.blog.grid-list',['post' =>$post])
+              <span class="badge created-at d-flex align-items-center">
+                <Icon name="uil:calendar-alt" size="20" class="mr-5" />
+                  <span>{{ post.created_at }}</span>
+              </span>
+            </div>
+            <div class="blog-grid-detail">
+              <a :href="post.url">
+                <h3 class="blog-grid-title mt-10">{{ post.title }}</h3>
+              </a>
+
+              <div class="mt-20 blog-grid-desc">{{ post.description }}</div>
+
+              <div class="blog-grid-footer d-flex align-items-center justify-content-between mt-15">
+                <span>
+                  <Icon name="uil:user-circle" size="20" />
+                  <span class="ml-5">{{ post.author.username }}</span>
+                </span>
+
+                <span class="d-flex align-items-center">
+                  <Icon name="uil:comment-lines" size="20" />
+                  <span class="ml-5">{{ post.comments_count }}</span>
+                </span>
+              </div>
+            </div>
+          </div>
         </div>
-        @endforeach
-
       </div>
     </section>
-    @endif
   </div>
 </template>
 
 <script setup>
+import { useFetch, useRuntimeConfig } from "nuxt/app";
+import {ref} from "vue";
 
+const config = useRuntimeConfig();
+console.log(config.public.apiBase);
+
+const { data } = await useFetch(`${config.public.apiBase}/site/index`);
+console.log(data.value);
+
+const heroSectionData = ref(null);
 </script>
-
-<style scoped>
-
-</style>

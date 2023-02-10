@@ -82,6 +82,55 @@ class SettingsRepository
     }
 
     /**
+     * Получить глобальные настройки для использования в шаблоне приложения
+     * @param string|null $key
+     *
+     * @return array|mixed|string|null
+     * @throws \Throwable
+     * @author Виталий Москвин <foreach@mail.ru>
+     */
+    public function getGeneralSettings(?string $key = null)
+    {
+        return $this->getSetting(self::$general, self::$generalName, $key);
+    }
+
+    /**
+     * Получить ссылки для верхнего меню из настроек
+     *
+     * @param string|null $key
+     *
+     * @return array|mixed|string|null
+     * @throws \Throwable
+     * @author Виталий Москвин <foreach@mail.ru>
+     */
+    public function getNavbarLinksSettings(?string $key = null)
+    {
+        return $this->getSetting(self::$navbarLink, self::$navbarLinkName, $key);
+    }
+
+    /**
+     * Получить колонки для футера из настроек
+     * @return array|mixed|string|null
+     * @throws \Throwable
+     * @author Виталий Москвин <foreach@mail.ru>
+     */
+    public function getFooterColumns()
+    {
+        return $this->getSetting(self::$footer, self::$footerName);
+    }
+
+    /**
+     * Получить кнопки социальных сетей для футера
+     * @return array|mixed|string|null
+     * @throws \Throwable
+     * @author Виталий Москвин <foreach@mail.ru>
+     */
+    public function getSocials()
+    {
+        return $this->getSetting(self::$socials, self::$socialsName);
+    }
+
+    /**
      * Получить настройки в зависимости от переданных параметров
      *
      * @param $static
@@ -94,6 +143,7 @@ class SettingsRepository
      */
     private function getSetting(&$static, $name, $key = null)
     {
+        \Yii::$app->cache->flush();
         if (!isset($static)) {
             $static = Settings::getDb()->cache(function ($db) use ($name) {
                 return Settings::findOne(['name' => $name]);

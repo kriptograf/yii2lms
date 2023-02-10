@@ -17,9 +17,14 @@ use Yii;
  * @property TrendCategories[] $trendCategories
  * @property UsersOccupations[] $usersOccupations
  * @property Webinars[] $webinars
+ * @property Categories[] $subCategories
+ *
+ * @property string $url
  */
 class Categories extends \yii\db\ActiveRecord
 {
+    public string $url;
+
     /**
      * {@inheritdoc}
      */
@@ -51,6 +56,26 @@ class Categories extends \yii\db\ActiveRecord
             'order' => 'Order',
             'icon' => 'Icon',
         ];
+    }
+
+    /**
+     * Прикручиваем дополнительные атрибуты для возврата rest клиенту
+     * @return array|false|int[]|string[]
+     * @author Виталий Москвин <foreach@mail.ru>
+     */
+    public function fields()
+    {
+        $fields = parent::fields();
+
+        $fields['url'] = function () {
+            return '/categories/' . str_replace(' ', '-', $this->title);
+        };
+
+        $fields['subCategories'] = function () {
+            return $this->subCategories;
+        };
+
+        return $fields;
     }
 
     /**
@@ -96,6 +121,11 @@ class Categories extends \yii\db\ActiveRecord
     public function getCountWebinars()
     {
         return $this->hasMany(Webinars::class, ['category_id' => 'id'])->count();
+    }
+
+    public function getSubCategories()
+    {
+        return $this->hasMany(Categories::class, ['parent_id' => 'id']);
     }
 
     /**
